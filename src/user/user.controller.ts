@@ -19,18 +19,20 @@ export class UserController {
   constructor(private userService: UserService) {}
   @Get()
   @UseGuards(AuthGuard())
-  findCurrentUser(@User() { username }: UserEntity) {
-    return this.userService.findByUsername(username);
+  async findCurrentUser(@User() { username }: UserEntity) {
+    const user = await this.userService.findByUsername(username);
+    return { user };
   }
 
   @Put()
   @UseGuards(AuthGuard())
-  updateUser(
+  async updateUser(
     @User() { username }: UserEntity,
     @Body(new ValidationPipe({ transform: true, whitelist: true }))
     data: UpdateDTO,
   ) {
-    return this.userService.updateUser(username, data);
+    const user = await this.userService.updateUser(username, data);
+    return { user };
   }
 
   @Get('/:username')
@@ -38,6 +40,6 @@ export class UserController {
     const user = await this.userService.findByUsername(username);
     if (!user) throw new NotFoundException('User not found!');
 
-    return user;
+    return { user };
   }
 }
