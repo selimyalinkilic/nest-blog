@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { ArticleModule } from './article/article.module';
 
 @Module({
   imports: [
@@ -18,9 +19,12 @@ import { UserModule } from './user/user.module';
       database: process.env.DATABASE_DB,
       autoLoadEntities: true,
       synchronize: true,
+      dropSchema: false,
+      logging: true,
     }),
     AuthModule,
     UserModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
