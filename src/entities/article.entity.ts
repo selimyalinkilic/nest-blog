@@ -13,18 +13,15 @@ import { UserEntity } from './user.entity';
 @Entity('articles')
 export class ArticleEntity extends AbstractEntity {
   @Column()
-  slug: string;
-
-  @Column()
   title: string;
 
-  @Column()
+  @Column({ default: null, nullable: true })
   description: string;
 
   @Column()
   body: string;
 
-  @Column()
+  @Column({ default: null, nullable: true })
   thumbnail: string;
 
   @ManyToOne((type) => UserEntity, (user) => user.articles)
@@ -33,13 +30,8 @@ export class ArticleEntity extends AbstractEntity {
   @Column('simple-array')
   tags: string[];
 
-  @BeforeInsert()
-  generateSlug() {
-    this.slug =
-      slugify(this.title, { lower: true }) +
-      '-' +
-      ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
-  }
+  @Column({ unique: true })
+  slug: string;
 
   toJSON() {
     return classToPlain(this);
